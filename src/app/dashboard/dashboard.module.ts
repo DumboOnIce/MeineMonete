@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
 import { OverviewDashboardComponent } from './overview-dashboard/overview-dashboard.component';
+import { MorrisChartDirective } from '../shared/directives/morris-chart/morris-chart-directive';
 const routes: Routes = [
   {
     path: "",
@@ -15,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [OverviewDashboardComponent],
+  declarations: [OverviewDashboardComponent, MorrisChartDirective],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

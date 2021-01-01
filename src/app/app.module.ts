@@ -14,6 +14,8 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SideBarComponent } from './components/layout/side-bar/side-bar.component';
 import { TopBarComponent } from './components/layout/top-bar/top-bar.component';
+import { MorrisChartDirective } from './shared/directives/morris-chart/morris-chart-directive';
+
 
 
 
@@ -24,7 +26,7 @@ import { TopBarComponent } from './components/layout/top-bar/top-bar.component';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    DashboardModule,
+    DashboardModule   
   ],
   providers: [],
   bootstrap: [AppComponent]

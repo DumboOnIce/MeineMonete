@@ -9,8 +9,8 @@ import { MorrisBarChartService } from "src/app/shared/services/morris-chart/morr
   styleUrls: ["./overview-dashboard.component.scss"],
 })
 export class OverviewDashboardComponent implements OnInit {
-  public barChartData: any;
-  public barChartOptions: any;
+  public datas: any;
+  public options: any;
   public thisYearsNumber: number = 0;
   public sumOfThisYear: number = 0;  
   public lastYearsNumber: number = 0;
@@ -24,8 +24,8 @@ export class OverviewDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.barChartOptions = this.barChartService.createComparableBarChartOptions("Dieses Jahr", "Letztes Jahr");
-    this.barChartData = [{x:'1', a: 0, b: 0}];
+    this.options = this.barChartService.createComparableBarChartOptions("Dieses Jahr", "Letztes Jahr");
+    this.datas = [{x:'1', a: 0, b: 0}];
     this.thisYearsNumber = +this.dateService.todaysYear();
     this.lastYearsNumber = this.thisYearsNumber -1;
   }

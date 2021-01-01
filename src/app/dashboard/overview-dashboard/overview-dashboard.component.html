@@ -29,7 +29,8 @@
             <div class="card-body">
               <div class="d-flex m-b-30 align-items-center no-block">
                 <h5 class="card-title ">Ausgaben von {{thisYearsNumber}}/{{lastYearsNumber}}</h5>
-              </div>
+              </div>     
+              <div mk-morris-js [options]='options' [data]='datas' type='Bar'></div>
             </div>
             <div class="card-body bg-light">
               <div class="row text-center m-b-20">
