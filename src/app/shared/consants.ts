@@ -1,0 +1,1 @@
+export const moneyFyDateFormat = 'DD.MM.YYYY';
