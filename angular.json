@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "MeineMonete"
+  "defaultProject": "MeineMonete",
+  "cli": {
+    "analytics": false
+  }
 }
