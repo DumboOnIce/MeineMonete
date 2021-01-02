@@ -58,18 +58,10 @@ export class MorrisBarChartService{
     let results: Array<IDonutChartDataModel> = [];
     const data = this.filterDataByYear(year, this.mapping.mapMoneyFyDtoToViewModel(dtos));
     const groupedByCategories = this.dataWrangler.groupByCategories(data);
-
-    let categorySum = 0;
-    groupedByCategories.forEach((value)=>{
-      categorySum+=value;
+    
+    groupedByCategories.forEach((value, key)=>{
+      results.push({label: key, value: this.roundUp((value))});
     });
-
-    if(categorySum>0)
-    {
-      groupedByCategories.forEach((value, key)=>{
-        results.push({label: key, value: this.roundUp((value/categorySum)*100)});
-      });
-    }
 
     return results;
   }
