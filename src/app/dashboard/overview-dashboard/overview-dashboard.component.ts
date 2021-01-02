@@ -4,7 +4,7 @@ import { DateService } from "src/app/shared/services/date-services";
 import { MorrisBarChartService } from "src/app/shared/services/morris-chart/morris-bar-chart.service";
 import { parse } from 'papaparse'
 import { IMoneyFyDataItemDto } from "src/app/shared/models/data-transfer-objects/money-fy-data-item-dto";
-import { ICompareableBarChartDataModel } from "src/app/shared/models/morris-chart/compareable-bar-chart-model";
+import { ICompareableBarChartDataModel } from "src/app/shared/models/morris-chart/compareable-bar-chart-data-model";
 
 
 @Component({
@@ -22,40 +22,35 @@ export class OverviewDashboardComponent implements OnInit {
 
   public donutChartData: any; 
   public donutChartOptions: any;
+  public sumOfCategories: number = 0;
 
   constructor(
     private router: Router,
     private dateService: DateService,
     private barChartService: MorrisBarChartService
   ) {
-    this.thisYearsNumber = +this.dateService.todaysYear();
-    this.lastYearsNumber = this.thisYearsNumber -1;
-    this.barChartOptions = this.barChartService.createComparableBarChartOptions(this.thisYearsNumber.toString(), this.lastYearsNumber.toString());
-    this.barChartData = [{x:'1', a: 0, b: 0}];
+    this.initBarchart();
+    this.initDonutChart();
+  }
 
-
+  private initDonutChart() {
     this.donutChartOptions = {
       resize: true
     };
-    
-    this.donutChartData =  [
-      {label: "Download Sales", value: 12},
-      {label: "In-Store Sales", value: 30},
-      {label: "Mail-Order Sales", value: 20},
-      {label: "Download Sales", value: 12},
-      {label: "In-Store Sales", value: 30},
-      {label: "Mail-Order Sales", value: 20},
-      {label: "Download Sales", value: 12},
-      {label: "In-Store Sales", value: 30},
-      {label: "Mail-Order Sales", value: 20},
-      {label: "Download Sales", value: 12},
-      {label: "In-Store Sales", value: 30},
-      {label: "Mail-Order Sales", value: 20},
-      {label: "Download Sales", value: 12},
-      {label: "In-Store Sales", value: 30},
-      {label: "Mail-Order Sales", value: 2},
-    ];
 
+    this.donutChartData = [
+      { label: "Nichts", value: 100 },
+    ];
+  }
+
+  private initBarchart() {
+    this.thisYearsNumber = +this.dateService.todaysYear();
+    this.lastYearsNumber = this.thisYearsNumber - 1;
+    this.barChartOptions = this.barChartService.createComparableBarChartOptions(this.thisYearsNumber.toString(), this.lastYearsNumber.toString());
+    this.barChartData = [{ x: '1', a: 0, b: 0 }];
+  
+    this.sumOfThisYear = 0;     
+    this.sumOfLastYear  = 0;
   }
 
   ngOnInit(): void {
@@ -72,7 +67,7 @@ export class OverviewDashboardComponent implements OnInit {
             delimiter: ';',
             skipEmptyLines: true,
             complete: (result,file) => {
-              this.updateCharts(result);                       
+              this.updateCharts(result.data as IMoneyFyDataItemDto[]);                       
             }
          })
 
@@ -81,15 +76,26 @@ export class OverviewDashboardComponent implements OnInit {
     }  
   }
 
+  private updateCharts(data: IMoneyFyDataItemDto[]): void {
+    this.updateBarCharts(data);
+    this.updateCategoryDonutChart(2021, data);
+  }
 
-
-  private updateCharts(result: any): void {
-    const data: IMoneyFyDataItemDto[] =  result.data as IMoneyFyDataItemDto[];
+  private updateBarCharts(data: IMoneyFyDataItemDto[]) {
     const comparableData = this.barChartService.createComparableBarChartData(data);
-    this.barChartData = comparableData;    
-    comparableData.forEach(x=>{
-      this.sumOfThisYear+=x.a;
-      this.sumOfLastYear+=x.b;
-    })
+    this.barChartData = comparableData;
+    comparableData.forEach(x => {
+      this.sumOfThisYear += x.a;
+      this.sumOfLastYear += x.b;
+    });
+  }
+
+  private updateCategoryDonutChart(year: number, data: IMoneyFyDataItemDto[])
+  {
+    const donutChartData = this.barChartService.createDonutChartDataForCategoriesOfOneYear(year, data);
+    this.donutChartData = donutChartData;
+    donutChartData.forEach(x => {
+      this.sumOfCategories += x.value; 
+    });
   }
 }
