@@ -16,6 +16,11 @@
           Daten laden
           <input type="file" #fileInput (change)="loadData(fileInput)" />
         </button>
+        <button class="btn btn-danger text-white ml-3 d-none d-md-block file-button">
+          <span> <i class="fa fa-folder-open"></i></span>
+          Daten löschen
+          <input type="file" #fileInput (change)="loadData(fileInput)" />
+        </button>
       </div>
     </div>
   </div>
@@ -52,8 +57,8 @@
     <div class="col-lg-4">
       <div class="card oh">
         <div class="card-body">
-          <div class="d-flex m-b-30 no-block">
-            <h4 class="card-title m-b-0 align-self-center">Aufteilung in Prozent</h4>
+          <div class="d-flex m-b-30 align-items-center no-block">
+            <h5 class="card-title ">Aufteilung in Prozent</h5>
             <div class="ml-auto">
               <select class="form-control">
                 <option selected="">{{thisYearsNumber}}</option>
@@ -61,24 +66,23 @@
               </select>
             </div>
           </div>
-          <div id="visitor" style="height: 260px; width: 100%; max-height: 260px; position: relative;" class="c3">
-            <div mk-morris-js [options]="donutChartOptions" [data]="donutChartData" type="Donut"></div>
-          </div>
-
-
+          <div mk-morris-js [options]="donutChartOptions" [data]="donutChartData" type="Donut"></div>
         </div>
         <div class="card-body bg-light">
           <div class="row text-center m-b-20">
             <div class="col-lg-4 col-md-4 m-t-20">
+              <h2 class="m-b-0 font-light">&nbsp;</h2><span
+                class="text-muted">&nbsp;</span>
             </div>
             <div class="col-lg-4 col-md-4 m-t-20">
-              <h2 class="m-b-0 font-light">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2><span
-                class="text-muted">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <h2 class="m-b-0 font-light">{{sumOfLastYear}} Euro</h2><span
+                class="text-muted">{{lastYearsNumber}}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
 
   </div>
   <!-- ============================================================== -->
