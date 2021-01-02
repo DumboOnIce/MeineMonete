@@ -4,6 +4,8 @@ import { moneyFyDateFormat } from "../../consants";
 import { IMoneyFyDataItemDto } from "../../models/data-transfer-objects/money-fy-data-item-dto";
 import { ICompareableBarChartDataModel } from "../../models/morris-chart/compareable-bar-chart-model";
 import { IMoneyFyDataItemViewModel } from "../../models/view-models/money-fy-data-item-view-model";
+import { DataWranglerService } from "../data-utilities/data-wrangler.service";
+import { MappingService } from "../data-utilities/mapping.service";
 import { DateService } from "../date-services";
 
 
@@ -12,7 +14,7 @@ import { DateService } from "../date-services";
 })
 export class MorrisBarChartService{
 
-  constructor(private dateService: DateService){
+  constructor(private dateService: DateService, private dataWrangler: DataWranglerService, private mapping: MappingService){
 
   }
 
@@ -35,16 +37,16 @@ export class MorrisBarChartService{
     let results: Array<ICompareableBarChartDataModel> = [];
 
     const thisYearNumber:string = this.dateService.todaysYear();
-    const lastYearNumber: string = (+this.dateService.todaysYear()-1).toString();
+    const lastYearNumber: string = this.dateService.getNumberOfYearFromToday(-1);
 
-    const data = this.mapDataToViewModel(dtos);
+    const data = this.mapping.mapMoneyFyDtoToViewModel(dtos);
 
     
     const thisYear = data.filter(x=>x.year === thisYearNumber &&  x.amount < 0);
-    const amountByMonthThisYear = this.groupByMonths(thisYear);
+    const amountByMonthThisYear = this.dataWrangler.groupByMonths(thisYear);
     
     const lastYear = data.filter(x=>x.year === lastYearNumber && x.amount < 0);
-    const amountByMonthLastYear = this.groupByMonths(lastYear);
+    const amountByMonthLastYear = this.dataWrangler.groupByMonths(lastYear);
 
     for(let i=1; i<13; i++)
     {
@@ -52,45 +54,15 @@ export class MorrisBarChartService{
       let valueOfThisYear = amountByMonthThisYear.get(month) || 0;
       let valueOfLastYear = amountByMonthLastYear.get(month) || 0; 
       
-      results.push({x:month, a: Math.round((valueOfThisYear + Number.EPSILON) * 100) / 100, b: Math.round((valueOfLastYear + Number.EPSILON) * 100) / 100});
+      results.push({x:month, a: this.roundUp(valueOfThisYear), b: this.roundUp(valueOfLastYear)});
     }
 
     return results;
 
   }
 
-  private mapDataToViewModel(moneyFyDataFromBackend: IMoneyFyDataItemDto[]): IMoneyFyDataItemViewModel[] {
-    return moneyFyDataFromBackend.map((item) => {
-  
-      const result : IMoneyFyDataItemViewModel = {
-        ...item,
-        day: this.dateService.getDay(item.date, moneyFyDateFormat),
-        year: this.dateService.getYear(item.date, moneyFyDateFormat),
-        month: this.dateService.getMonth(item.date, moneyFyDateFormat)
-      };
-      return result;
-    });
+
+  private roundUp(valueOfThisYear: number): number {
+    return Math.round((valueOfThisYear + Number.EPSILON) * 100) / 100;
   }
-
-
-  private groupByMonths(dataOfOneYear: IMoneyFyDataItemViewModel[]) {
-    const amountByMonth = new Map<string, number>();
-    for (const { month, amount } of dataOfOneYear) {
-      amountByMonth.set(month, (amountByMonth.get(month) || 0) + (+amount)*(-1));
-    }
-
-    /* Default-Werte auffüllen. */
-    for(let i=1; i<13; i++)
-    {
-      let month = i.toString();
-      let amount = amountByMonth.get(month);
-      if(!amount)
-      {
-        amountByMonth.set(month, 0);
-      }
-    }
-
-    return amountByMonth;
-  }
-
 }

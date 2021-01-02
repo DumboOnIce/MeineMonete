@@ -14,6 +14,11 @@ export class DateService {
   public todaysYear(): string{
     return moment().format('YYYY');
   }
+
+  public getNumberOfYearFromToday(yearNumber: number): string
+  {
+    return (+this.todaysYear()+yearNumber).toString();
+  }
   
 
   public getMonth(date: string, format: string): string{

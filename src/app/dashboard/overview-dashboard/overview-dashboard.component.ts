@@ -13,7 +13,7 @@ import { ICompareableBarChartDataModel } from "src/app/shared/models/morris-char
   styleUrls: ["./overview-dashboard.component.scss"],
 })
 export class OverviewDashboardComponent implements OnInit {
-  public barChartData: ICompareableBarChartDataModel[];
+  public barChartData: any;
   public barChartOptions: any;
   public thisYearsNumber: number = 0;
   public sumOfThisYear: number = 0;  
@@ -58,8 +58,9 @@ export class OverviewDashboardComponent implements OnInit {
 
   private updateCharts(result: any): void {
     const data: IMoneyFyDataItemDto[] =  result.data as IMoneyFyDataItemDto[];
-    this.barChartData = this.barChartService.createComparableBarChartData(data);    
-    this.barChartData.forEach(x=>{
+    const comparableData = this.barChartService.createComparableBarChartData(data);
+    this.barChartData = comparableData;    
+    comparableData.forEach(x=>{
       this.sumOfThisYear+=x.a;
       this.sumOfLastYear+=x.b;
     })
