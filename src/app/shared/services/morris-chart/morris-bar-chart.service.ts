@@ -1,8 +1,7 @@
-import { SummaryResolver } from "@angular/compiler";
 import { Injectable } from "@angular/core";
-import { moneyFyDateFormat } from "../../consants";
 import { IMoneyFyDataItemDto } from "../../models/data-transfer-objects/money-fy-data-item-dto";
-import { ICompareableBarChartDataModel } from "../../models/morris-chart/compareable-bar-chart-model";
+import { ICompareableBarChartDataModel } from "../../models/morris-chart/compareable-bar-chart-data-model";
+import { IDonutChartDataModel } from "../../models/morris-chart/donut-chart-data-model";
 import { IMoneyFyDataItemViewModel } from "../../models/view-models/money-fy-data-item-view-model";
 import { DataWranglerService } from "../data-utilities/data-wrangler.service";
 import { MappingService } from "../data-utilities/mapping.service";
@@ -28,24 +27,19 @@ export class MorrisBarChartService{
     };
   }
 
-    /**
+   /**
    * Erzeuge Datenreihen für Balken-Diagramme mit einem Vorjahres-Vergleich
    * @param dtos Ausgelesene Daten aus der CSV-Datei.
    */
   public createComparableBarChartData(dtos: IMoneyFyDataItemDto[]):ICompareableBarChartDataModel[]
   { 
     let results: Array<ICompareableBarChartDataModel> = [];
-
-    const thisYearNumber:string = this.dateService.todaysYear();
-    const lastYearNumber: string = this.dateService.getNumberOfYearFromToday(-1);
-
     const data = this.mapping.mapMoneyFyDtoToViewModel(dtos);
 
-    
-    const thisYear = data.filter(x=>x.year === thisYearNumber &&  x.amount < 0);
+    const thisYear = this.filterDataByYear(+this.dateService.todaysYear(),  data);
     const amountByMonthThisYear = this.dataWrangler.groupByMonths(thisYear);
     
-    const lastYear = data.filter(x=>x.year === lastYearNumber && x.amount < 0);
+    const lastYear = this.filterDataByYear(+this.dateService.getNumberOfYearFromToday(-1), data);
     const amountByMonthLastYear = this.dataWrangler.groupByMonths(lastYear);
 
     for(let i=1; i<13; i++)
@@ -58,9 +52,28 @@ export class MorrisBarChartService{
     }
 
     return results;
-
   }
 
+  public createDonutChartDataForCategoriesOfOneYear(year: number, dtos: IMoneyFyDataItemDto[]): IDonutChartDataModel[]{
+    let results: Array<IDonutChartDataModel> = [];
+    const data = this.filterDataByYear(year, this.mapping.mapMoneyFyDtoToViewModel(dtos));
+    const groupedByCategories = this.dataWrangler.groupByCategories(data);
+
+    groupedByCategories.forEach((value, key)=>{
+      results.push({
+        label: key,
+        value: value
+      });
+    });
+
+    return results;
+  }
+  
+
+  private filterDataByYear(year: number, data: IMoneyFyDataItemViewModel[]) {   
+    const thisYear = data.filter(x => x.year === year.toString() && x.amount < 0);
+    return thisYear;
+  }
 
   private roundUp(valueOfThisYear: number): number {
     return Math.round((valueOfThisYear + Number.EPSILON) * 100) / 100;

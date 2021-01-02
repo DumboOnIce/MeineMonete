@@ -8,7 +8,7 @@ export class DataWranglerService {
 
   constructor() { }
 
-  public groupByMonths(dataOfOneYear: IMoneyFyDataItemViewModel[]) {
+  public groupByMonths(dataOfOneYear: IMoneyFyDataItemViewModel[]): Map<string, number>  {
     const amountByMonth = new Map<string, number>();
     for (const { month, amount } of dataOfOneYear) {
       amountByMonth.set(month, (amountByMonth.get(month) || 0) + (+amount)*(-1));
@@ -27,4 +27,14 @@ export class DataWranglerService {
 
     return amountByMonth;
   }
+
+
+  public groupByCategories(dataOfOneYear: IMoneyFyDataItemViewModel[]): Map<string, number> {
+    const amountByCategory = new Map<string, number>();
+    for (const { category, amount } of dataOfOneYear) {
+      amountByCategory.set(category, (amountByCategory.get(category) || 0) + (+amount)*(-1));
+    }
+    return amountByCategory;
+  }
+
 }
