@@ -59,10 +59,9 @@
           <div class="d-flex m-b-30 align-items-center no-block">
             <h5 class="card-title ">Aufteilung in Prozent</h5>
             <div class="ml-auto">
-              <select class="form-control">
-                <option selected="">{{thisYearsNumber}}</option>
-                <option value="1">{{lastYearsNumber}}</option>
-              </select>
+              <select class="form-control" [(ngModel)]="selectedYear" (change)="onYearSelectionChannged($event)">
+                <option *ngFor="let year of selectableYears" [value]="year">{{year}}</option>
+              </select>              
             </div>
           </div>
           <div mk-morris-js [options]="donutChartOptions" [data]="donutChartData" type="Donut"></div>
@@ -74,8 +73,8 @@
                 class="text-muted">&nbsp;</span>
             </div>
             <div class="col-lg-4 col-md-4 m-t-20">
-              <h2 class="m-b-0 font-light">{{sumOfLastYear}} € </h2><span
-                class="text-muted">{{lastYearsNumber}}</span>
+              <h2 class="m-b-0 font-light">&nbsp;</h2><span
+                class="text-muted">{{selectedYear}}</span>
             </div>
           </div>
         </div>

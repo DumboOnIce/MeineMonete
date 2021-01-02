@@ -59,12 +59,17 @@ export class MorrisBarChartService{
     const data = this.filterDataByYear(year, this.mapping.mapMoneyFyDtoToViewModel(dtos));
     const groupedByCategories = this.dataWrangler.groupByCategories(data);
 
-    groupedByCategories.forEach((value, key)=>{
-      results.push({
-        label: key,
-        value: value
-      });
+    let categorySum = 0;
+    groupedByCategories.forEach((value)=>{
+      categorySum+=value;
     });
+
+    if(categorySum>0)
+    {
+      groupedByCategories.forEach((value, key)=>{
+        results.push({label: key, value: this.roundUp((value/categorySum)*100)});
+      });
+    }
 
     return results;
   }
