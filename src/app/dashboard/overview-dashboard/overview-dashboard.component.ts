@@ -20,6 +20,9 @@ export class OverviewDashboardComponent implements OnInit {
   public lastYearsNumber: number = 0;
   public sumOfLastYear: number = 0;
 
+  public donutChartData: any; 
+  public donutChartOptions: any;
+
   constructor(
     private router: Router,
     private dateService: DateService,
@@ -29,6 +32,30 @@ export class OverviewDashboardComponent implements OnInit {
     this.lastYearsNumber = this.thisYearsNumber -1;
     this.barChartOptions = this.barChartService.createComparableBarChartOptions(this.thisYearsNumber.toString(), this.lastYearsNumber.toString());
     this.barChartData = [{x:'1', a: 0, b: 0}];
+
+
+    this.donutChartOptions = {
+      resize: true
+    };
+    
+    this.donutChartData =  [
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales", value: 30},
+      {label: "Mail-Order Sales", value: 20},
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales", value: 30},
+      {label: "Mail-Order Sales", value: 20},
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales", value: 30},
+      {label: "Mail-Order Sales", value: 20},
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales", value: 30},
+      {label: "Mail-Order Sales", value: 20},
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales", value: 30},
+      {label: "Mail-Order Sales", value: 2},
+    ];
+
   }
 
   ngOnInit(): void {
