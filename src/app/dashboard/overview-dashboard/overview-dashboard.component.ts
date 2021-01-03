@@ -20,8 +20,8 @@ export class OverviewDashboardComponent implements OnInit {
   public barChartViewModel: SpendingComparisionBarChartViewModel;
   public donutChartViewModel: SpendingComparisionDonutChartViewModel;
 
-  public chartLineData: any;
-  public chartLineOptions: any;
+  public barChartOptions: any;
+  public barChartData: any;
 
   constructor(
     private dateService: DateService,

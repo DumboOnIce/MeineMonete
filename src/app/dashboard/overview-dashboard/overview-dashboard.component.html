@@ -33,6 +33,26 @@
   <div class="row">
 
   <div class="col-lg-12">
+    <div class="card oh">
+      <div class="card-body">
+        <div class="d-flex m-b-30 align-items-center no-block">
+          <h5 class="card-title ">Jährliche ausgaben</h5>
+        </div>
+        <div mk-morris-js [options]='barChartOptions' [data]='barChartData' type='Bar'></div>
+      </div>
+      <div class="card-body bg-light">
+        <div class="row text-center m-b-20">
+          <div class="col-lg-4 col-md-4 m-t-20">
+            <h2 class="m-b-0 font-light">{{500}} € </h2><span
+              class="text-muted">{{500}}</span>
+          </div>
+          <div class="col-lg-4 col-md-4 m-t-20">
+            <h2 class="m-b-0 font-light">{{500}} € </h2><span
+              class="text-muted">{{500}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <div class="col-lg-6">   

@@ -1,7 +1,7 @@
 <div class="card oh">
     <div class="card-body">
       <div class="d-flex m-b-30 align-items-center no-block">
-        <h5 class="card-title ">Aufteilung in Prozent</h5>
+        <h5 class="card-title ">Aufteilung nach Kategorien</h5>
         <div class="ml-auto">
           <select class="form-control" [(ngModel)]="viewModel.selectedYear" (change)="onYearSelectionChannged($event)">
             <option *ngFor="let year of viewModel.selectableYears" [value]="year">{{year}}</option>
