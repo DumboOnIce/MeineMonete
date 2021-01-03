@@ -63,7 +63,7 @@ export class MorrisChartService{
       results.push({label: key, value: this.roundUp(value)});
     });
 
-    return results;
+    return results = results.sort((a,b)=>{return a.label.localeCompare(b.label);});
   }
   
 
