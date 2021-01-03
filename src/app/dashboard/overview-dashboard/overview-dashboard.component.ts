@@ -6,6 +6,9 @@ import { LocalStorageService } from "src/app/shared/services/local-storage-servi
 import { SpendingComparisionBarChartViewModel} from "../spending-comparision-bar-chart/spending-comparision-bar-chart-view-model";
 import { SpendingComparisionDonutChartViewModel } from "../spending-comparision-donut-chart/spending-comparision-donut-chart-view-model";
 import { MorrisChartService } from "src/app/shared/services/morris-chart/morris-chart.service";
+import { DataWranglerService } from "src/app/shared/services/data-utilities/data-wrangler.service";
+import { MappingService } from "src/app/shared/services/data-utilities/mapping.service";
+import { ILineChartDataModel } from "src/app/shared/models/morris-chart/line-chart-data-model";
 
 
 @Component({
@@ -17,13 +20,19 @@ export class OverviewDashboardComponent implements OnInit {
   public barChartViewModel: SpendingComparisionBarChartViewModel;
   public donutChartViewModel: SpendingComparisionDonutChartViewModel;
 
+  public chartLineData: any;
+  public chartLineOptions: any;
+
   constructor(
     private dateService: DateService,
     private morrisChartService: MorrisChartService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private dataWrangler: DataWranglerService,
+    private mappingService: MappingService
   ) {    
     this.barChartViewModel = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
-    this.donutChartViewModel = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);       
+    this.donutChartViewModel = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
+    
   }
 
   ngOnInit(): void {
@@ -64,8 +73,9 @@ export class OverviewDashboardComponent implements OnInit {
           delimiter: ';',
           skipEmptyLines: true,
           complete: (result, file) => {
-            this.localStorage.saveMoneyFyData(result.data as IMoneyFyDataItemDto[]);
-            this.updateCharts(result.data as IMoneyFyDataItemDto[]);
+            const data = (result.data as IMoneyFyDataItemDto[]).filter(x=>x.amount<0);            
+            this.localStorage.saveMoneyFyData(data);
+            this.updateCharts(data);
           }
         })
       };
@@ -73,13 +83,11 @@ export class OverviewDashboardComponent implements OnInit {
     }
   }
 
-  deleteData(): void{
-    alert('Dumbo');
-  }
 
   private updateCharts(data: IMoneyFyDataItemDto[]): void {
     this.barChartViewModel.update(data);
-    this.donutChartViewModel.update(+this.dateService.todaysYear(), data);
+    this.donutChartViewModel.update(+this.dateService.todaysYear(), data);               
   }
+
 
 }

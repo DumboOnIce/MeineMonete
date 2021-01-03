@@ -8,9 +8,9 @@ export class DataWranglerService {
 
   constructor() { }
 
-  public groupByMonths(dataOfOneYear: IMoneyFyDataItemViewModel[]): Map<string, number>  {
+  public groupByMonths(data: IMoneyFyDataItemViewModel[]): Map<string, number>  {
     const amountByMonth = new Map<string, number>();
-    for (const { month, amount } of dataOfOneYear) {
+    for (const { month, amount } of data) {
       amountByMonth.set(month, (amountByMonth.get(month) || 0) + (+amount)*(-1));
     }
 
@@ -29,12 +29,20 @@ export class DataWranglerService {
   }
 
 
-  public groupByCategories(dataOfOneYear: IMoneyFyDataItemViewModel[]): Map<string, number> {
+  public groupByCategories(data: IMoneyFyDataItemViewModel[]): Map<string, number> {
     const amountByCategory = new Map<string, number>();
-    for (const { category, amount } of dataOfOneYear) {
+    for (const { category, amount } of data) {
       amountByCategory.set(category, (amountByCategory.get(category) || 0) + (+amount)*(-1));
     }
     return amountByCategory;
+  }
+
+  public groupByYears(data: IMoneyFyDataItemViewModel[]): Map<string, number> {
+    const amountByYear = new Map<string, number>();
+    for (const { year, amount } of data) {
+      amountByYear.set(year, (amountByYear.get(year) || 0) + (+amount)*(-1));
+    }
+    return amountByYear;
   }
 
 }
