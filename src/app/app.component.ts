@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public currentYear: number;
-  title = 'MeineMonete';
+  title = 'ShowMeMore';
 
   constructor(){
     this.currentYear = new Date().getFullYear();
