@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { DateService } from "src/app/shared/services/date-services";
 import { parse } from 'papaparse'
 import { IMoneyFyDataItemDto } from "src/app/shared/models/data-transfer-objects/money-fy-data-item-dto";
@@ -19,7 +18,6 @@ export class OverviewDashboardComponent implements OnInit {
   public donutChartViewModel: SpendingComparisionDonutChartViewModel;
 
   constructor(
-    private router: Router,
     private dateService: DateService,
     private morrisChartService: MorrisChartService,
     private localStorage: LocalStorageService
@@ -50,9 +48,7 @@ export class OverviewDashboardComponent implements OnInit {
   private initBarchart() {    
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
-      this.barChartViewModel.barChartData = [{ x: '1', a: 0, b: 0 }];
-      this.barChartViewModel.sumOfThisYear = 0;
-      this.barChartViewModel.sumOfLastYear = 0;
+      this.barChartViewModel.reset();
     }
     else {
       this.barChartViewModel.update(savedData);
