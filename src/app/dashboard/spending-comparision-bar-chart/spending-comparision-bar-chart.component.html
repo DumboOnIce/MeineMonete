@@ -1,0 +1,21 @@
+
+    <div class="card oh">
+      <div class="card-body">
+        <div class="d-flex m-b-30 align-items-center no-block">
+          <h5 class="card-title ">Ausgaben von {{viewModel.thisYearsNumber}}/{{viewModel.lastYearsNumber}}</h5>
+        </div>
+        <div mk-morris-js [options]='viewModel.barChartOptions' [data]='viewModel.barChartData' type='Bar'></div>
+      </div>
+      <div class="card-body bg-light">
+        <div class="row text-center m-b-20">
+          <div class="col-lg-4 col-md-4 m-t-20">
+            <h2 class="m-b-0 font-light">{{viewModel.sumOfThisYear}} € </h2><span
+              class="text-muted">{{viewModel.thisYearsNumber}}</span>
+          </div>
+          <div class="col-lg-4 col-md-4 m-t-20">
+            <h2 class="m-b-0 font-light">{{viewModel.sumOfLastYear}} € </h2><span
+              class="text-muted">{{viewModel.lastYearsNumber}}</span>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -11,7 +11,7 @@ import { DateService } from "../date-services";
 @Injectable({
   providedIn: "root",
 })
-export class MorrisBarChartService{
+export class MorrisChartService{
 
   constructor(private dateService: DateService, private dataWrangler: DataWranglerService, private mapping: MappingService){
 

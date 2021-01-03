@@ -4,6 +4,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { OverviewDashboardComponent } from './overview-dashboard/overview-dashboard.component';
 import { MorrisChartDirective } from '../shared/directives/morris-chart/morris-chart-directive';
 import { FormsModule } from '@angular/forms';
+import { SpendingComparisionBarChartComponent } from './spending-comparision-bar-chart/spending-comparision-bar-chart.component';
+import { SpendingComparisionDonutChartComponent } from './spending-comparision-donut-chart/spending-comparision-donut-chart.component';
 
 
 const routes: Routes = [
@@ -19,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [OverviewDashboardComponent, MorrisChartDirective],
+  declarations: [OverviewDashboardComponent, MorrisChartDirective, SpendingComparisionBarChartComponent, SpendingComparisionDonutChartComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
