@@ -8,7 +8,7 @@ import { SpendingComparisionDonutChartViewModel } from "../spending-comparision-
 import { MorrisChartService } from "src/app/shared/services/morris-chart/morris-chart.service";
 import { DataWranglerService } from "src/app/shared/services/data-utilities/data-wrangler.service";
 import { MappingService } from "src/app/shared/services/data-utilities/mapping.service";
-import { ILineChartDataModel } from "src/app/shared/models/morris-chart/line-chart-data-model";
+import { YearlyCategorySpendingBarChartViewModel } from "../category-spending-bar-chart/category-spending-bar-chart-view-model";
 
 
 @Component({
@@ -17,12 +17,10 @@ import { ILineChartDataModel } from "src/app/shared/models/morris-chart/line-cha
   styleUrls: ["./overview-dashboard.component.scss"],
 })
 export class OverviewDashboardComponent implements OnInit {
-  public barChartViewModel: SpendingComparisionBarChartViewModel;
-  public donutChartViewModel: SpendingComparisionDonutChartViewModel;
-
-  public barChartOptions: any;
-  public barChartData: any;
-  public barChartSelectableCategories: string[] =[];
+  public comparableBarChart: SpendingComparisionBarChartViewModel;
+  public compareableDonutChart: SpendingComparisionDonutChartViewModel;
+  public yearlyCategoryBarChart: YearlyCategorySpendingBarChartViewModel;
+  
 
   constructor(
     private dateService: DateService,
@@ -31,36 +29,23 @@ export class OverviewDashboardComponent implements OnInit {
     private dataWrangler: DataWranglerService,
     private mappingService: MappingService
   ) {
-    this.barChartViewModel = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
-    this.donutChartViewModel = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
-
+    this.comparableBarChart = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
+    this.compareableDonutChart = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
+    this.yearlyCategoryBarChart = new YearlyCategorySpendingBarChartViewModel(this.dataWrangler, this.morrisChartService, this.mappingService);
   }
 
   ngOnInit(): void {
-    this.initBarchart();
-    this.initDonutChart();
-  }
-
-  private initDonutChart() {
-
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
-      this.donutChartViewModel.reset();
+      this.compareableDonutChart.init();
+      this.comparableBarChart.init();     
+      this.yearlyCategoryBarChart.init();
     }
-    else {
-      this.donutChartViewModel.update(+this.dateService.todaysYear(), savedData);
-    }
-
-  }
-
-  private initBarchart() {
-    const savedData = this.localStorage.getMoneyFyData();
-    if (!savedData) {
-      this.barChartViewModel.reset();
-    }
-    else {
-      this.barChartViewModel.update(savedData);
-    }
+    else {              
+      this.compareableDonutChart.update(+this.dateService.todaysYear(), savedData);
+      this.comparableBarChart.update(savedData);
+      this.yearlyCategoryBarChart.update(savedData);
+    }    
   }
 
 
@@ -86,11 +71,8 @@ export class OverviewDashboardComponent implements OnInit {
 
 
   private updateCharts(data: IMoneyFyDataItemDto[]): void {
-    this.barChartViewModel.update(data);
-    this.donutChartViewModel.update(+this.dateService.todaysYear(), data);
-    this.barChartOptions = this.morrisChartService.createBarChartOptions("Ausgaben in Euro");
-    this.barChartData = this.morrisChartService.createBarChartData(data);    
+    this.comparableBarChart.update(data);
+    this.compareableDonutChart.update(+this.dateService.todaysYear(), data);
+    this.yearlyCategoryBarChart.update(data);    
   }
-
-
 }

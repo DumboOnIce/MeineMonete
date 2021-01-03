@@ -19,7 +19,7 @@ export class SpendingComparisionDonutChartViewModel {
         this.selectableYears.push(+this.dateService.todaysYear() - 1);
     }
 
-    public reset(): void{
+    public init(): void{
         this.donutChartData = [
             { label: "Nichts", value: 100 },
           ];

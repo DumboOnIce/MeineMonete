@@ -18,7 +18,7 @@ export class SpendingComparisionBarChartViewModel{
           this.lastYearsNumber.toString());
     }
 
-    public reset(): void{
+    public init(): void{
         this.barChartData = [{ x: '1', a: 0, b: 0 }];
         this.sumOfThisYear = 0;
         this.sumOfLastYear = 0;

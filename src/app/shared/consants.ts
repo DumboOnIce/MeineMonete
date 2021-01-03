@@ -1,5 +1,7 @@
-export const moneyFyDateFormat = 'DD.MM.YYYY';
+export const MoneyFyDateFormat = 'DD.MM.YYYY';
 
 export const localStorageLoadedDataName ='money-fy-data';
 
-export const monthNames = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+export const MonthNames = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+export const DefaultCategoryName ='ALLE';

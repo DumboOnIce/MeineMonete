@@ -22,7 +22,7 @@
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "jquery-sparkline": "^2.4.0",
-    "linq.ts": "^1.0.0",
+    "linqts": "^1.14.3",
     "moment": "^2.29.1",
     "morris.js": "^0.5.0",
     "papaparse": "^5.3.0",

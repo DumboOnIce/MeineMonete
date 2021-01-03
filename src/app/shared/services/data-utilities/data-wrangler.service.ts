@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IMoneyFyDataItemViewModel } from '../../models/view-models/money-fy-data-item-view-model';
-import {List} from 'linq.ts';
+import { List } from 'linqts';
+import { group } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,21 @@ export class DataWranglerService {
 
   public getDistinctCategories(data: IMoneyFyDataItemViewModel[]): string[]{
     const dataList = new List(data);
-    return dataList?.Select(x=>x.category)?.Distinct()?.ToArray();    
+    return dataList?.Select(x=>x.category)?.Distinct()?.OrderBy(x=>x).ToArray();  
+  }
+
+  public groupByCategoriesEachYear(category:string, data: IMoneyFyDataItemViewModel[]): Map<string, number> {
+    const amountCategoriesEachYear= new Map<string, number>();
+    const dataList = new List(data);
+    const groupByYears = dataList.GroupBy(x=>x.year);
+
+    for(let key in groupByYears)
+    {                
+        var amount = (new List(groupByYears[key])).Where(x=>x?.category===category).Sum(x=>x?.amount || 0);
+        amountCategoriesEachYear.set(key, (amountCategoriesEachYear.get(key) || 0) + (+amount)*(-1));       
+    }
+
+    return amountCategoriesEachYear;
   }
 
 }
