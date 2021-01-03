@@ -19,6 +19,12 @@ export class SpendingComparisionDonutChartViewModel {
         this.selectableYears.push(+this.dateService.todaysYear() - 1);
     }
 
+    public reset(): void{
+        this.donutChartData = [
+            { label: "Nichts", value: 100 },
+          ];
+    }
+
     public update(year: number, data: IMoneyFyDataItemDto[]) {
         const donutChartData = this.chartService.createDonutChartDataForCategoriesOfOneYear(year, data);
         this.donutChartData = donutChartData;

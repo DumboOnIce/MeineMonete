@@ -27,6 +27,8 @@ export class SpendingComparisionBarChartViewModel{
     public update(data: IMoneyFyDataItemDto[]):void {
         const comparableData = this.barChartService.createComparableBarChartData(data);
         this.barChartData = comparableData;
+        this.sumOfLastYear = 0;
+        this.sumOfThisYear = 0;
         comparableData.forEach(x => {
           this.sumOfThisYear += x.a;
           this.sumOfLastYear += x.b;

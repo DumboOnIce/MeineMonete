@@ -35,9 +35,7 @@ export class OverviewDashboardComponent implements OnInit {
 
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
-      this.donutChartViewModel.donutChartData = [
-        { label: "Nichts", value: 100 },
-      ];
+
     }
     else {
       this.donutChartViewModel.update(+this.dateService.todaysYear(), savedData);
