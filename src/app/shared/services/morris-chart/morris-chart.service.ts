@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IMoneyFyDataItemDto } from "../../models/data-transfer-objects/money-fy-data-item-dto";
+import { IBarChartDataModel } from "../../models/morris-chart/bar-chart-data-model";
 import { ICompareableBarChartDataModel } from "../../models/morris-chart/compareable-bar-chart-data-model";
 import { IDonutChartDataModel } from "../../models/morris-chart/donut-chart-data-model";
 import { IMoneyFyDataItemViewModel } from "../../models/view-models/money-fy-data-item-view-model";
@@ -15,6 +16,28 @@ export class MorrisChartService{
 
   constructor(private dateService: DateService, private dataWrangler: DataWranglerService, private mapping: MappingService){
 
+  }
+
+  public createBarChartOptions(label: string): any{
+    return {
+      xkey: "x",
+      ykeys: ["a"],
+      labels: [label],
+      resize: true,
+    };
+  }
+
+  public createBarChartData(dtos: IMoneyFyDataItemDto[]):IBarChartDataModel[]
+  { 
+    let results: Array<IBarChartDataModel> = [];
+    const data = this.mapping.mapMoneyFyDtoToViewModel(dtos);
+
+    const amountByYear = this.dataWrangler.groupByYears(data);
+    amountByYear.forEach((value, key)=>{
+      results.push({x:key, a: value});
+    });
+
+    return results;
   }
 
 

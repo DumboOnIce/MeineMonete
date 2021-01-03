@@ -3,7 +3,7 @@ import { DateService } from "src/app/shared/services/date-services";
 import { parse } from 'papaparse'
 import { IMoneyFyDataItemDto } from "src/app/shared/models/data-transfer-objects/money-fy-data-item-dto";
 import { LocalStorageService } from "src/app/shared/services/local-storage-service";
-import { SpendingComparisionBarChartViewModel} from "../spending-comparision-bar-chart/spending-comparision-bar-chart-view-model";
+import { SpendingComparisionBarChartViewModel } from "../spending-comparision-bar-chart/spending-comparision-bar-chart-view-model";
 import { SpendingComparisionDonutChartViewModel } from "../spending-comparision-donut-chart/spending-comparision-donut-chart-view-model";
 import { MorrisChartService } from "src/app/shared/services/morris-chart/morris-chart.service";
 import { DataWranglerService } from "src/app/shared/services/data-utilities/data-wrangler.service";
@@ -22,6 +22,7 @@ export class OverviewDashboardComponent implements OnInit {
 
   public barChartOptions: any;
   public barChartData: any;
+  public barChartSelectableCategories: string[] =[];
 
   constructor(
     private dateService: DateService,
@@ -29,10 +30,10 @@ export class OverviewDashboardComponent implements OnInit {
     private localStorage: LocalStorageService,
     private dataWrangler: DataWranglerService,
     private mappingService: MappingService
-  ) {    
+  ) {
     this.barChartViewModel = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
     this.donutChartViewModel = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
-    
+
   }
 
   ngOnInit(): void {
@@ -44,7 +45,7 @@ export class OverviewDashboardComponent implements OnInit {
 
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
-
+      this.donutChartViewModel.reset();
     }
     else {
       this.donutChartViewModel.update(+this.dateService.todaysYear(), savedData);
@@ -52,7 +53,7 @@ export class OverviewDashboardComponent implements OnInit {
 
   }
 
-  private initBarchart() {    
+  private initBarchart() {
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
       this.barChartViewModel.reset();
@@ -73,7 +74,7 @@ export class OverviewDashboardComponent implements OnInit {
           delimiter: ';',
           skipEmptyLines: true,
           complete: (result, file) => {
-            const data = (result.data as IMoneyFyDataItemDto[]).filter(x=>x.amount<0);            
+            const data = (result.data as IMoneyFyDataItemDto[]).filter(x => x.amount < 0);
             this.localStorage.saveMoneyFyData(data);
             this.updateCharts(data);
           }
@@ -86,7 +87,9 @@ export class OverviewDashboardComponent implements OnInit {
 
   private updateCharts(data: IMoneyFyDataItemDto[]): void {
     this.barChartViewModel.update(data);
-    this.donutChartViewModel.update(+this.dateService.todaysYear(), data);               
+    this.donutChartViewModel.update(+this.dateService.todaysYear(), data);
+    this.barChartOptions = this.morrisChartService.createBarChartOptions("Ausgaben in Euro");
+    this.barChartData = this.morrisChartService.createBarChartData(data);    
   }
 
 

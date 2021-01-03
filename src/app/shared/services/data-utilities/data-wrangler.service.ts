@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IMoneyFyDataItemViewModel } from '../../models/view-models/money-fy-data-item-view-model';
+import {List} from 'linq.ts';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,11 @@ export class DataWranglerService {
       amountByYear.set(year, (amountByYear.get(year) || 0) + (+amount)*(-1));
     }
     return amountByYear;
+  }
+
+  public getDistinctCategories(data: IMoneyFyDataItemViewModel[]): string[]{
+    const dataList = new List(data);
+    return dataList?.Select(x=>x.category)?.Distinct()?.ToArray();    
   }
 
 }
