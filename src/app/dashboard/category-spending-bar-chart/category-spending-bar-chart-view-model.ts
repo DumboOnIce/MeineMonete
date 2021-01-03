@@ -8,6 +8,7 @@ export class YearlyCategorySpendingBarChartViewModel{
     public barChartData: any;
     public barChartSelectableCategories: string[] =[];
     public selectedCategory!: string;
+    public title!:string;
 
 
     constructor(private dataWrangler:DataWranglerService,  private morrisChartService: MorrisChartService, private mappingService: MappingService) {

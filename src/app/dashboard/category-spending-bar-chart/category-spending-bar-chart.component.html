@@ -1,7 +1,7 @@
 <div class="card oh">
     <div class="card-body">
       <div class="d-flex m-b-30 align-items-center no-block">
-        <h5 class="card-title ">Jährliche Ausgaben</h5>
+        <h5 class="card-title ">{{viewModel.title}}</h5>
         <div class="ml-auto">
           <select class="form-control" [(ngModel)]="viewModel.selectedCategory" (change)="onCategoryChanged($event)">
             <option *ngFor="let category of viewModel.barChartSelectableCategories" [value]="category">{{category}}</option>

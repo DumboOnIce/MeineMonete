@@ -32,6 +32,7 @@ export class OverviewDashboardComponent implements OnInit {
     this.comparableBarChart = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
     this.compareableDonutChart = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
     this.yearlyCategoryBarChart = new YearlyCategorySpendingBarChartViewModel(this.dataWrangler, this.morrisChartService, this.mappingService);
+    this.yearlyCategoryBarChart.title ="Jährliche Ausgabe";
   }
 
   ngOnInit(): void {
