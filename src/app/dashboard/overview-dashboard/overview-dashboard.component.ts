@@ -50,6 +50,7 @@ export class OverviewDashboardComponent implements OnInit {
       this.compareableDonutChart.update(+this.dateService.todaysYear(), savedData);
       this.comparableBarChart.update(savedData);
       this.updateYearlyCategoryBarChart(DefaultCategoryName, savedData);
+      this.updateMonthlyCategoryBarChart(DefaultCategoryName, savedData);
     }
   }
 
@@ -81,6 +82,7 @@ export class OverviewDashboardComponent implements OnInit {
     this.comparableBarChart.update(data);
     this.compareableDonutChart.update(+this.dateService.todaysYear(), data);
     this.updateYearlyCategoryBarChart(DefaultCategoryName, data);
+    this.updateMonthlyCategoryBarChart(DefaultCategoryName, data);
   }
 
 

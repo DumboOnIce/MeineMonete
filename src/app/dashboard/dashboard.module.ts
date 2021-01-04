@@ -16,7 +16,7 @@ const routes: Routes = [
     pathMatch: "full"
   },
   {
-    path: "dashboard",
+    path: "meinemonete",
     component: OverviewDashboardComponent,
   },
 ];

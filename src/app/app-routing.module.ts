@@ -5,7 +5,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 const routes: Routes = [
   {
-    path: 'dashboard',
+    path: 'meinemonete',
     data: { preload: false },
     loadChildren: () =>
       import('./dashboard/dashboard.module').then(
@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'meinemonete',
     pathMatch: 'full'
   },
   {

@@ -47,20 +47,55 @@ export class DataWranglerService {
     return amountByYear;
   }
 
-  public getDistinctCategories(data: IMoneyFyDataItemViewModel[]): string[]{
+  public groupByYearsThenMonths(data: IMoneyFyDataItemViewModel[]): Map<string, number> {
+    const amountByYearThenMonth = new Map<string, number>();
+
     const dataList = new List(data);
-    return dataList?.Select(x=>x.category)?.Distinct()?.OrderBy(x=>x).ToArray();  
+    const groupedByYears = dataList.GroupBy(x=>x.year);
+    for(let year in groupedByYears)
+    {
+        let groupedByMonths = (new List(groupedByYears[year])).GroupBy(x=>x.month);
+        for(let month in groupedByMonths)
+        {
+          let amount = (new List(groupedByMonths[month])).Sum(x=>x?.amount || 0)
+          amountByYearThenMonth.set(`${month}-${year}`, (amount * -1));
+        }
+    }
+    return amountByYearThenMonth;
   }
 
-  public groupByCategoriesEachYear(category:string, data: IMoneyFyDataItemViewModel[]): Map<string, number> {
+  public groupByYearsThenByMonthsFilterByCategory(category:string, data: IMoneyFyDataItemViewModel[]): Map<string, number> {
+    const amountByYearThenMonth = new Map<string, number>();
+
+    const dataList = new List(data);
+    const groupedByYears = dataList.GroupBy(x=>x.year);
+    for(let year in groupedByYears)
+    {
+        let groupedByMonths = (new List(groupedByYears[year])).GroupBy(x=>x.month);
+        for(let month in groupedByMonths)
+        {
+          let amount = (new List(groupedByMonths[month])).Where(x=>x?.category === category).Sum(x=>x?.amount || 0)
+          amountByYearThenMonth.set(`${month}-${year}`, (amount * -1));
+        }
+    }
+    return amountByYearThenMonth;
+  }
+
+
+  public getDistinctCategories(data: IMoneyFyDataItemViewModel[]): string[]{
+    const dataList = new List(data);
+    return dataList?.Select(x=>x.category)?.Distinct()?.OrderBy(x=>x).ToArray();
+  }
+
+  public groupByYearsThenByCategories(category:string, data: IMoneyFyDataItemViewModel[]): Map<string, number> {
     const amountCategoriesEachYear= new Map<string, number>();
     const dataList = new List(data);
     const groupByYears = dataList.GroupBy(x=>x.year);
 
     for(let key in groupByYears)
-    {                
-        var amount = (new List(groupByYears[key])).Where(x=>x?.category===category).Sum(x=>x?.amount || 0);
-        amountCategoriesEachYear.set(key, (amountCategoriesEachYear.get(key) || 0) + (+amount)*(-1));       
+    {
+        let amount = (new List(groupByYears[key])).Where(x=>x?.category===category).Sum(x=>x?.amount || 0);
+        amountCategoriesEachYear.set(key, (amountCategoriesEachYear.get(key) || 0) + (+amount)*(-1));
     }
 
     return amountCategoriesEachYear;

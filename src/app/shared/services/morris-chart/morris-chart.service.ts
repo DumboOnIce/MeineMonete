@@ -36,7 +36,7 @@ export class MorrisChartService {
        amountByYear = this.dataWrangler.groupByYears(data);
     }
     else{
-       amountByYear = this.dataWrangler.groupByCategoriesEachYear(categoryName, data);
+       amountByYear = this.dataWrangler.groupByYearsThenByCategories(categoryName, data);
     }
     amountByYear.forEach((value, key) => {
       results.push({ x: key, a: value });
@@ -50,10 +50,10 @@ export class MorrisChartService {
     const data = this.mapping.mapMoneyFyDtoToViewModel(dtos);
     let amountByYear: Map<string, number>=new Map();
     if (categoryName === DefaultCategoryName) {
-       amountByYear = this.dataWrangler.groupByYears(data);
+       amountByYear = this.dataWrangler.groupByYearsThenMonths(data);
     }
     else{
-       amountByYear = this.dataWrangler.groupByCategoriesEachYear(categoryName, data);
+       amountByYear = this.dataWrangler.groupByYearsThenByMonthsFilterByCategory(categoryName, data);
     }
     amountByYear.forEach((value, key) => {
       results.push({ x: key, a: value });
