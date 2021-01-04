@@ -63,14 +63,17 @@ export class OverviewDashboardComponent implements OnInit {
           delimiter: ';',
           skipEmptyLines: true,
           complete: (result, file) => {
-            const today = this.dateService.today();
-            const data = (result.data as IMoneyFyDataItemDto[]).filter(x => x.amount < 0 && this.dateService.parse(x.date)<today);
+            const data = (result.data as IMoneyFyDataItemDto[]).filter(x => x.amount < 0);
             this.localStorage.saveMoneyFyData(data);
+            console.log(data);
             this.updateCharts(data);
           }
         })
       };
-      reader.readAsText(input.files[0]);
+      if(input.files.length>0)
+      {
+        reader.readAsText(input.files[0]);
+      }
     }
   }
 
