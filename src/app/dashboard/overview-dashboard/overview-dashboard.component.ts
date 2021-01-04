@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { DateService } from "src/app/shared/services/date-services";
 import { parse } from 'papaparse'
 import { IMoneyFyDataItemDto } from "src/app/shared/models/data-transfer-objects/money-fy-data-item-dto";
@@ -10,6 +10,7 @@ import { DataWranglerService } from "src/app/shared/services/data-utilities/data
 import { MappingService } from "src/app/shared/services/data-utilities/mapping.service";
 import { CategorySpendingBarChartViewModel } from "../category-spending-bar-chart/category-spending-bar-chart-view-model";
 import { DefaultCategoryName } from "src/app/shared/consants";
+import { MatTableDataSource } from "@angular/material/table";
 
 
 @Component({
@@ -22,7 +23,7 @@ export class OverviewDashboardComponent implements OnInit {
   public compareableDonutChart: SpendingComparisionDonutChartViewModel;
   public yearlyCategoryBarChart: CategorySpendingBarChartViewModel;
   public monthlyCategoryBarChart: CategorySpendingBarChartViewModel;
-
+  public dataSource!: MatTableDataSource<IMoneyFyDataItemDto>;
 
   constructor(
     private dateService: DateService,
@@ -37,6 +38,7 @@ export class OverviewDashboardComponent implements OnInit {
     this.yearlyCategoryBarChart.title ="Jährliche Ausgabe";
     this.monthlyCategoryBarChart = new CategorySpendingBarChartViewModel();
     this.monthlyCategoryBarChart.title ="Monatliche Ausgabe";
+    this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
@@ -51,6 +53,7 @@ export class OverviewDashboardComponent implements OnInit {
       this.comparableBarChart.update(savedData);
       this.updateYearlyCategoryBarChart(DefaultCategoryName, savedData);
       this.updateMonthlyCategoryBarChart(DefaultCategoryName, savedData);
+      this.dataSource.data = savedData;
     }
   }
 
@@ -67,6 +70,7 @@ export class OverviewDashboardComponent implements OnInit {
             const data = (result.data as IMoneyFyDataItemDto[]).filter(x => x.amount < 0);
             this.localStorage.saveMoneyFyData(data);
             this.updateCharts(data);
+            this.dataSource.data = data;
           }
         })
       };
@@ -85,18 +89,17 @@ export class OverviewDashboardComponent implements OnInit {
     this.updateMonthlyCategoryBarChart(DefaultCategoryName, data);
   }
 
-
-  // ######################## Yearly-Category-Bar-Chart ########################
-  yearlyCategoryChanged(category: string):void{
-    this.updateYearlyCategoryBarChart(category, this.localStorage.getMoneyFyData());
-  }
-  private updateYearlyCategoryBarChart(categoryName: string, savedData: IMoneyFyDataItemDto[]) {
-    this.yearlyCategoryBarChart.barChartSelectableCategories = this.dataWrangler.getDistinctCategories(this.mappingService.mapMoneyFyDtoToViewModel(savedData));
-    this.yearlyCategoryBarChart.barChartSelectableCategories.push("ALLE");
-    this.yearlyCategoryBarChart.barChartOptions = this.morrisChartService.createBarChartOptions("Ausgaben in Euro");
-    this.yearlyCategoryBarChart.barChartData = this.morrisChartService.createYearlyBarChartData(categoryName, savedData);
-  }
-  // ######################## Yearly-Category-Bar-Chart ########################
+    // ######################## Yearly-Category-Bar-Chart ########################
+    yearlyCategoryChanged(category: string):void{
+      this.updateYearlyCategoryBarChart(category, this.localStorage.getMoneyFyData());
+    }
+    private updateYearlyCategoryBarChart(categoryName: string, savedData: IMoneyFyDataItemDto[]) {
+      this.yearlyCategoryBarChart.barChartSelectableCategories = this.dataWrangler.getDistinctCategories(this.mappingService.mapMoneyFyDtoToViewModel(savedData));
+      this.yearlyCategoryBarChart.barChartSelectableCategories.push("ALLE");
+      this.yearlyCategoryBarChart.barChartOptions = this.morrisChartService.createBarChartOptions("Ausgaben in Euro");
+      this.yearlyCategoryBarChart.barChartData = this.morrisChartService.createYearlyBarChartData(categoryName, savedData);
+    }
+    // ######################## Yearly-Category-Bar-Chart ########################
 
     // ######################## Monthly-Category-Bar-Chart ########################
     monthlyCategoryChanged(category: string):void{
@@ -109,4 +112,6 @@ export class OverviewDashboardComponent implements OnInit {
       this.monthlyCategoryBarChart.barChartData = this.morrisChartService.createMonthlyBarChartData(categoryName, savedData);
     }
     // ######################## Monthly-Category-Bar-Chart ########################
+
+
 }

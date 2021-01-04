@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SideBarComponent } from './components/layout/side-bar/side-bar.component';
 import { TopBarComponent } from './components/layout/top-bar/top-bar.component';
 import { MorrisChartDirective } from './shared/directives/morris-chart/morris-chart-directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -26,7 +27,8 @@ import { MorrisChartDirective } from './shared/directives/morris-chart/morris-ch
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    DashboardModule   
+    DashboardModule,
+    BrowserAnimationsModule   
   ],
   providers: [],
   bootstrap: [AppComponent]
