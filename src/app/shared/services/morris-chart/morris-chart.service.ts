@@ -37,7 +37,24 @@ export class MorrisChartService {
     }
     else{
        amountByYear = this.dataWrangler.groupByCategoriesEachYear(categoryName, data);
-    }    
+    }
+    amountByYear.forEach((value, key) => {
+      results.push({ x: key, a: value });
+    });
+
+    return results;
+  }
+
+  public createMonthlyBarChartData(categoryName: string, dtos: IMoneyFyDataItemDto[]): IBarChartDataModel[] {
+    let results: Array<IBarChartDataModel> = [];
+    const data = this.mapping.mapMoneyFyDtoToViewModel(dtos);
+    let amountByYear: Map<string, number>=new Map();
+    if (categoryName === DefaultCategoryName) {
+       amountByYear = this.dataWrangler.groupByYears(data);
+    }
+    else{
+       amountByYear = this.dataWrangler.groupByCategoriesEachYear(categoryName, data);
+    }
     amountByYear.forEach((value, key) => {
       results.push({ x: key, a: value });
     });
