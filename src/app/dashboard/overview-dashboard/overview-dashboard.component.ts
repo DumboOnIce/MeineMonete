@@ -8,7 +8,8 @@ import { SpendingComparisionDonutChartViewModel } from "../spending-comparision-
 import { MorrisChartService } from "src/app/shared/services/morris-chart/morris-chart.service";
 import { DataWranglerService } from "src/app/shared/services/data-utilities/data-wrangler.service";
 import { MappingService } from "src/app/shared/services/data-utilities/mapping.service";
-import { YearlyCategorySpendingBarChartViewModel } from "../category-spending-bar-chart/category-spending-bar-chart-view-model";
+import { CategorySpendingBarChartViewModel } from "../category-spending-bar-chart/category-spending-bar-chart-view-model";
+import { DefaultCategoryName } from "src/app/shared/consants";
 
 
 @Component({
@@ -19,8 +20,8 @@ import { YearlyCategorySpendingBarChartViewModel } from "../category-spending-ba
 export class OverviewDashboardComponent implements OnInit {
   public comparableBarChart: SpendingComparisionBarChartViewModel;
   public compareableDonutChart: SpendingComparisionDonutChartViewModel;
-  public yearlyCategoryBarChart: YearlyCategorySpendingBarChartViewModel;
-  
+  public yearlyCategoryBarChart: CategorySpendingBarChartViewModel;
+
 
   constructor(
     private dateService: DateService,
@@ -31,7 +32,7 @@ export class OverviewDashboardComponent implements OnInit {
   ) {
     this.comparableBarChart = new SpendingComparisionBarChartViewModel(this.dateService, this.morrisChartService);
     this.compareableDonutChart = new SpendingComparisionDonutChartViewModel(this.dateService, this.morrisChartService);
-    this.yearlyCategoryBarChart = new YearlyCategorySpendingBarChartViewModel(this.dataWrangler, this.morrisChartService, this.mappingService);
+    this.yearlyCategoryBarChart = new CategorySpendingBarChartViewModel();
     this.yearlyCategoryBarChart.title ="Jährliche Ausgabe";
   }
 
@@ -39,16 +40,15 @@ export class OverviewDashboardComponent implements OnInit {
     const savedData = this.localStorage.getMoneyFyData();
     if (!savedData) {
       this.compareableDonutChart.init();
-      this.comparableBarChart.init();     
+      this.comparableBarChart.init();
       this.yearlyCategoryBarChart.init();
     }
-    else {              
+    else {
       this.compareableDonutChart.update(+this.dateService.todaysYear(), savedData);
       this.comparableBarChart.update(savedData);
-      this.yearlyCategoryBarChart.update(savedData);
-    }    
+      this.updateYearlyCategoryBarChart(DefaultCategoryName, savedData);
+    }
   }
-
 
   loadData(input: HTMLInputElement): void {
     if (input.files) {
@@ -74,6 +74,19 @@ export class OverviewDashboardComponent implements OnInit {
   private updateCharts(data: IMoneyFyDataItemDto[]): void {
     this.comparableBarChart.update(data);
     this.compareableDonutChart.update(+this.dateService.todaysYear(), data);
-    this.yearlyCategoryBarChart.update(data);    
+    this.updateYearlyCategoryBarChart(DefaultCategoryName, data);
   }
+
+
+  // ######################## Yearly-Category-Bar-Chart ########################
+  yearlyCategoryChanged(category: string):void{
+    this.updateYearlyCategoryBarChart(category, this.localStorage.getMoneyFyData());
+  }
+  private updateYearlyCategoryBarChart(categoryName: string, savedData: IMoneyFyDataItemDto[]) {
+    this.yearlyCategoryBarChart.barChartSelectableCategories = this.dataWrangler.getDistinctCategories(this.mappingService.mapMoneyFyDtoToViewModel(savedData));
+    this.yearlyCategoryBarChart.barChartSelectableCategories.push("ALLE");
+    this.yearlyCategoryBarChart.barChartOptions = this.morrisChartService.createBarChartOptions("Ausgaben in Euro");
+    this.yearlyCategoryBarChart.barChartData = this.morrisChartService.createYearlyBarChartData(categoryName, savedData);
+  }
+    // ######################## Yearly-Category-Bar-Chart ########################
 }
