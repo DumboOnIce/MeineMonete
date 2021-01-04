@@ -11,7 +11,7 @@ export class YearlyCategorySpendingBarChartComponent implements OnInit {
   @Input() viewModel!: CategorySpendingBarChartViewModel;
   @Output() categoryChanged = new EventEmitter<string>();
 
-  constructor(private localStorage: LocalStorageService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 

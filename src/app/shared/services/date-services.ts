@@ -11,6 +11,14 @@ export class DateService {
     return moment().toDate();
   }
 
+  public parse(date:string) : Date{
+    return new Date(moment(date).format('DD.MM.YYYY'));
+  }
+
+  public todayAsString(): string{
+    return moment().format('DD.MM.YYYY');
+  }
+
   public todaysYear(): string{
     return moment().format('YYYY');
   }
@@ -19,7 +27,7 @@ export class DateService {
   {
     return (+this.todaysYear()+yearNumber).toString();
   }
-  
+
 
   public getMonth(date: string, format: string): string{
     const check = moment(date, format);
