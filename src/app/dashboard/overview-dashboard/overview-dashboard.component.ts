@@ -65,7 +65,6 @@ export class OverviewDashboardComponent implements OnInit {
           complete: (result, file) => {
             const data = (result.data as IMoneyFyDataItemDto[]).filter(x => x.amount < 0);
             this.localStorage.saveMoneyFyData(data);
-            console.log(data);
             this.updateCharts(data);
           }
         })
