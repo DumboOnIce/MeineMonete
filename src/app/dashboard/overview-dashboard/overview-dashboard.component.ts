@@ -12,7 +12,6 @@ import { CategorySpendingBarChartViewModel } from '../category-spending-bar-char
 import { DefaultCategoryName } from 'src/app/shared/constants';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISummerizedFactsTableViewModel } from '../summerized-facts-table/summerized-facts-table-view-model';
-import { List } from 'linqts';
 import { FactsCalculationService } from 'src/app/shared/services/data-utilities/facts-calculation.service';
 
 @Component({
