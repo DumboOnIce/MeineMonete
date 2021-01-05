@@ -93,38 +93,10 @@ export class OverviewDashboardComponent implements OnInit {
     this.updateYearlyCategoryBarChart(DefaultCategoryName, data);
     this.updateMonthlyCategoryBarChart(DefaultCategoryName, data);
     this.tableDataSource.data = data;
-    this.summerizedTableDataSource.data = this.calculateSummerizedFacts(data);
+    this.summerizedTableDataSource.data = this.factsCalculation.calculateSummerizedFacts(data);
   }
 
 
-  private calculateSummerizedFacts(data: IMoneyFyDataItemDto[]) {
-    let summerizedFacts: ISummerizedFactsTableViewModel[] = [];
-    const dataList = new List(
-      this.mappingService.mapMoneyFyDtoToViewModel(data)
-    );
-    const numberOfYears = dataList
-      .Select((x) => x.year)
-      .Distinct()
-      .Count();
-    const numberOfMonths = dataList
-      .Select((x) => x.month)
-      .Distinct()
-      .Count();
-
-    let totalFacts: ISummerizedFactsTableViewModel = this.factsCalculation.calcTotalFacts(
-      dataList,
-      numberOfYears,
-      numberOfMonths
-    );
-
-    let groupedCategoryFacts: ISummerizedFactsTableViewModel[] = this.factsCalculation.calcGroupedCategoryFacts(dataList,
-      numberOfYears,
-      numberOfMonths);
-
-    summerizedFacts.push(totalFacts);
-    summerizedFacts = summerizedFacts.concat(groupedCategoryFacts);
-    return summerizedFacts;
-  }
 
   // ######################## Yearly-Category-Bar-Chart ########################
   yearlyCategoryChanged(category: string): void {

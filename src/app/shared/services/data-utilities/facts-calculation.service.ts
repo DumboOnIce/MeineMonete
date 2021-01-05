@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { List } from 'linqts';
 import { ISummerizedFactsTableViewModel } from 'src/app/dashboard/summerized-facts-table/summerized-facts-table-view-model';
+import { IMoneyFyDataItemDto } from '../../models/data-transfer-objects/money-fy-data-item-dto';
 import { IMoneyFyDataItemViewModel } from '../../models/view-models/money-fy-data-item-view-model';
 import { roundUp } from '../math';
+import { MappingService } from './mapping.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FactsCalculationService {
+
+  constructor(private mappingService: MappingService ){}
+
+
   public calcTotalFacts(
     dataList: List<IMoneyFyDataItemViewModel>,
     numberOfYears: number,
@@ -31,6 +37,35 @@ export class FactsCalculationService {
       averageCostEachYear: roundUp(averageCostEachYear),
     };
     return allCategoryFacts;
+  }
+
+  public calculateSummerizedFacts(data: IMoneyFyDataItemDto[]) {
+    let summerizedFacts: ISummerizedFactsTableViewModel[] = [];
+    const dataList = new List(
+      this.mappingService.mapMoneyFyDtoToViewModel(data)
+    );
+    const numberOfYears = dataList
+      .Select((x) => x.year)
+      .Distinct()
+      .Count();
+    const numberOfMonths = dataList
+      .Select((x) => x.month)
+      .Distinct()
+      .Count();
+
+    let totalFacts: ISummerizedFactsTableViewModel = this.calcTotalFacts(
+      dataList,
+      numberOfYears,
+      numberOfMonths
+    );
+
+    let groupedCategoryFacts: ISummerizedFactsTableViewModel[] = this.calcGroupedCategoryFacts(dataList,
+      numberOfYears,
+      numberOfMonths);
+
+    summerizedFacts.push(totalFacts);
+    summerizedFacts = summerizedFacts.concat(groupedCategoryFacts);
+    return summerizedFacts;
   }
 
   public calcGroupedCategoryFacts(
