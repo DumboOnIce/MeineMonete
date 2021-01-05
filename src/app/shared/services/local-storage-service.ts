@@ -16,4 +16,8 @@ export class LocalStorageService {
         localStorage.setItem(LocalStorageLoadedDataName, JSON.stringify(data));
     }
 
+    public deleteMoneyFyData():void{
+      localStorage.removeItem(LocalStorageLoadedDataName);
+    }
+
 }

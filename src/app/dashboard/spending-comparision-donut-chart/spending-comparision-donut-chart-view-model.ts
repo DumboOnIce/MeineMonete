@@ -28,6 +28,7 @@ export class SpendingComparisionDonutChartViewModel {
     public update(year: number, data: IMoneyFyDataItemDto[]) {
         const donutChartData = this.chartService.createDonutChartDataForCategoriesOfOneYear(year, data);
         this.donutChartData = donutChartData;
+
         donutChartData.forEach(x => {
           this.sumOfCategories += x.value;
         });
