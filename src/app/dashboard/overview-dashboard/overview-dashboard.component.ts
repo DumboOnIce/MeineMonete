@@ -86,6 +86,9 @@ export class OverviewDashboardComponent implements OnInit {
       if (input.files.length > 0) {
         reader.readAsText(input.files[0]);
       }
+      else{
+        this.notificationService.showWarning("Das Laden wurde abgebrochen!","Abgebrochen!");
+      }
     }
   }
 

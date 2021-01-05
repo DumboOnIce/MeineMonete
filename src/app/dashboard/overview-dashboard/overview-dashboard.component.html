@@ -14,7 +14,7 @@
         <button class="btn btn-warning text-white ml-3 d-none d-md-block file-button">
           <span> <i class="fa fa-folder-open"></i></span>
           Daten laden
-          <input type="file" #fileInput (change)="loadData(fileInput)" />
+          <input type="file" accept=".csv" #fileInput (change)="loadData(fileInput)" />
         </button>
       </div>
 
