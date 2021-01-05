@@ -13,6 +13,7 @@ import { DefaultCategoryName } from 'src/app/shared/constants';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISummerizedFactsTableViewModel } from '../summerized-facts-table/summerized-facts-table-view-model';
 import { FactsCalculationService } from 'src/app/shared/services/data-utilities/facts-calculation.service';
+import { ToastNotificationservice } from 'src/app/shared/notifications/toast-notification.service';
 
 @Component({
   selector: 'app-overview-dashboard',
@@ -33,7 +34,8 @@ export class OverviewDashboardComponent implements OnInit {
     private localStorage: LocalStorageService,
     private dataWrangler: DataWranglerService,
     private mappingService: MappingService,
-    private factsCalculation: FactsCalculationService
+    private factsCalculation: FactsCalculationService,
+    private notificationService: ToastNotificationservice
   ) {
     this.comparableBarChart = new SpendingComparisionBarChartViewModel(
       this.dateService,
@@ -77,6 +79,7 @@ export class OverviewDashboardComponent implements OnInit {
             );
             this.localStorage.saveMoneyFyData(data);
             this.updateUi(data);
+            this.notificationService.showSuccess("Datei wurde erfolgreich geladen!","Daten geladen!");
           },
         });
       };
