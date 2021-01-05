@@ -10,6 +10,7 @@ import { SpendingComparisionDonutChartComponent } from './spending-comparision-d
 import { YearlyCategorySpendingBarChartComponent } from './category-spending-bar-chart/category-spending-bar-chart.component';
 import { MaterialModule } from '../shared/material/material.module';
 import { MoneyFyDataTableComponent } from './money-fy-data-table/money-fy-data-table.component';
+import { SummerizedFactsTableComponent } from './summerized-facts-table/summerized-facts-table.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [OverviewDashboardComponent, MorrisChartDirective, SpendingComparisionBarChartComponent, SpendingComparisionDonutChartComponent, YearlyCategorySpendingBarChartComponent, MoneyFyDataTableComponent],
+  declarations: [OverviewDashboardComponent, MorrisChartDirective, SpendingComparisionBarChartComponent, SpendingComparisionDonutChartComponent, YearlyCategorySpendingBarChartComponent, MoneyFyDataTableComponent, SummerizedFactsTableComponent],
   imports: [
     CommonModule,
     MaterialModule,

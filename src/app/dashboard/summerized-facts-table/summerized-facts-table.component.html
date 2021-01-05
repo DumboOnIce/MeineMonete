@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex">
+      <div>
+        <h5 class="card-title">Fakten</h5>
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Bsp Auto" #factsInput>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Kategorie </th>
+          <td mat-cell *matCellDef="let row"> {{row.category}} </td>
+        </ng-container>
+
+        <!-- TotalAmount Column -->
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Summe-Gesamt </th>
+          <td mat-cell *matCellDef="let row"> {{row.totalAmount}} </td>
+        </ng-container>
+
+        <!-- AverageCostEachMonth Column -->
+        <ng-container matColumnDef="averageCostEachMonth">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Durchschnittskosten pro Monat </th>
+          <td mat-cell *matCellDef="let row"> {{row.averageCostEachMonth}} </td>
+        </ng-container>
+
+        <!-- AverageCostEachYear Column -->
+        <ng-container matColumnDef="averageCostEachYear">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Durchschnittskosten pro Jahr </th>
+          <td mat-cell *matCellDef="let row"> {{row.averageCostEachYear}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{factsInput.value}}"</td>
+        </tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 35]"></mat-paginator>
+    </div>
+  </div>
+</div>

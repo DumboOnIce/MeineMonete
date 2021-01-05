@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IMoneyFyDataItemViewModel } from '../../models/view-models/money-fy-data-item-view-model';
 import { List } from 'linqts';
-import { group } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'

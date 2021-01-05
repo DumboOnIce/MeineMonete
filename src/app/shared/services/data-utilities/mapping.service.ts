@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MoneyFyDateFormat } from '../../consants';
+import { MoneyFyDateFormat } from '../../constants';
 import { IMoneyFyDataItemDto } from '../../models/data-transfer-objects/money-fy-data-item-dto';
 import { IMoneyFyDataItemViewModel } from '../../models/view-models/money-fy-data-item-view-model';
 import { DateService } from '../date-services';
@@ -13,7 +13,7 @@ export class MappingService {
 
   public mapMoneyFyDtoToViewModel(moneyFyDataFromBackend: IMoneyFyDataItemDto[]): IMoneyFyDataItemViewModel[] {
     return moneyFyDataFromBackend.map((item) => {
-  
+
       const result : IMoneyFyDataItemViewModel = {
         ...item,
         day: this.dateService.getDay(item.date, MoneyFyDateFormat),

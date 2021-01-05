@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { DefaultCategoryName } from "../../consants";
+import { DefaultCategoryName } from "../../constants";
 import { IMoneyFyDataItemDto } from "../../models/data-transfer-objects/money-fy-data-item-dto";
 import { IBarChartDataModel } from "../../models/morris-chart/bar-chart-data-model";
 import { ICompareableBarChartDataModel } from "../../models/morris-chart/compareable-bar-chart-data-model";
@@ -8,6 +8,7 @@ import { IMoneyFyDataItemViewModel } from "../../models/view-models/money-fy-dat
 import { DataWranglerService } from "../data-utilities/data-wrangler.service";
 import { MappingService } from "../data-utilities/mapping.service";
 import { DateService } from "../date-services";
+import { roundUp } from "../math";
 
 
 @Injectable({
@@ -91,7 +92,7 @@ export class MorrisChartService {
       let valueOfThisYear = amountByMonthThisYear.get(month) || 0;
       let valueOfLastYear = amountByMonthLastYear.get(month) || 0;
 
-      results.push({ x: month, a: this.roundUp(valueOfThisYear), b: this.roundUp(valueOfLastYear) });
+      results.push({ x: month, a: roundUp(valueOfThisYear), b: roundUp(valueOfLastYear) });
     }
 
     return results;
@@ -103,7 +104,7 @@ export class MorrisChartService {
     const groupedByCategories = this.dataWrangler.groupByCategories(data);
 
     groupedByCategories.forEach((value, key) => {
-      results.push({ label: key, value: this.roundUp(value) });
+      results.push({ label: key, value: roundUp(value) });
     });
 
     return results = results.sort((a, b) => { return a.label.localeCompare(b.label); });
@@ -115,7 +116,5 @@ export class MorrisChartService {
     return thisYear;
   }
 
-  private roundUp(valueOfThisYear: number): number {
-    return Math.round((valueOfThisYear + Number.EPSILON) * 100) / 100;
-  }
+
 }
