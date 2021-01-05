@@ -27,6 +27,7 @@
     "linqts": "^1.14.3",
     "moment": "^2.29.1",
     "morris.js": "^0.5.0",
+    "ngx-toastr": "^13.2.0",
     "papaparse": "^5.3.0",
     "popper.js": "^1.16.1",
     "raphael": "^2.3.0",
